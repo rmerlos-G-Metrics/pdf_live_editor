@@ -6,7 +6,6 @@ export interface PatientReportData {
 }
 
 export interface PDFDictionary {
-    title: string;
     labels: {
         patient: string;
         patientId: string;

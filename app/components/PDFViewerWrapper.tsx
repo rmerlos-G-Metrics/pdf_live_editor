@@ -2,15 +2,13 @@
  * @author Ricardo Merlos Torres
  * @email rmerlos@g-metrics.com
  * @create date 2026-04-17 14:05:19
- * @modify date 2026-04-17 14:05:19
+ * @modify date 2026-04-17 15:21:53
  * @desc [description]
  */
 
 "use client";
 
-import React, { useEffect } from 'react';
-import { usePDF } from '@react-pdf/renderer';
-import { PatientReportPDF } from './PatientReportPDF';
+import React, { useEffect, useState } from 'react';
 import { PatientReportData, PDFDictionary } from '@/types/report';
 
 interface Props {
@@ -19,36 +17,45 @@ interface Props {
 }
 
 export default function PDFViewerWrapper({ data, dictionary }: Props) {
-  // 1. Use the hook instead of the component
-  const [instance, updateInstance] = usePDF({
-    document: <PatientReportPDF data={data} dictionary={dictionary} />
-  });
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    updateInstance();
-  }, [data, dictionary, updateInstance]);
+    let active = true;
+    setLoading(true);
 
-  if (instance.loading) {
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', color: 'white' }}>
-        Rendering Live Changes...
-      </div>
-    );
-  }
+    const fetchPdf = async () => {
+      const res = await fetch('/api/pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data, dictionary }),
+      });
 
-  if (instance.error) {
-    return (
-      <div style={{ padding: 20, color: '#ef4444', backgroundColor: '#fee2e2', height: '100%' }}>
-        <strong>PDF Error:</strong> {String(instance.error)}
-      </div>
-    );
-  }
+      if (!active) return;
+
+      if (res.ok) {
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        setPdfUrl(url);
+      }
+      setLoading(false);
+    };
+
+    const timeout = setTimeout(fetchPdf, 500);
+
+    return () => {
+      active = false;
+      clearTimeout(timeout);
+      if (pdfUrl) URL.revokeObjectURL(pdfUrl); // Cleanup old URLs
+    };
+  }, [data, dictionary]); // Triggers when data changes
+
+  if (loading && !pdfUrl) return <div>Generating PDF...</div>;
 
   return (
     <iframe 
-      src={instance.url || ''} 
+      src={pdfUrl} 
       style={{ width: '100%', height: '100%', border: 'none' }} 
-      title="Live PDF Preview"
     />
   );
 }

@@ -28,7 +28,6 @@ export default function Home() {
   };
 
   const mockDictionary: PDFDictionary = {
-    title: "Patient Report",
     labels: {
       patient: "Patient",
       patientId: "Patient ID",

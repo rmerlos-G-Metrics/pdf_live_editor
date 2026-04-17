@@ -38,8 +38,9 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
     },
     patientGrid: {
-        flex: 1,
+        width: "100%",
         flexDirection: "row",
+        justifyContent: "space-between"
     },
     column: {
         flex: 1,
@@ -171,17 +172,19 @@ export const PatientReportPDF = ({ data, dictionary }: PatientReportPDFProps) =>
               <Text style={styles.label}>{dictionary?.labels.sex || "Sex"}</Text>
               <Text style={styles.value}>{data?.sex || "-"}</Text>
             </View>
-            <View style={styles.infoGroup}>
-              <Text style={styles.label}>{dictionary?.labels.dob || "DOB"}</Text>
-              <Text style={styles.value}>{data?.dob || "-"}</Text>
-            </View>
           </View>
 
           <View style={styles.column}>
             <View style={styles.infoGroup}>
+              <Text style={styles.label}>{dictionary?.labels.dob || "DOB"}</Text>
+              <Text style={styles.value}>{data?.dob || "-"}</Text>
+            </View>
+            <View style={styles.infoGroup}>
               <Text style={styles.label}>{dictionary?.labels.exam || "Exam Date"}</Text>
               <Text style={styles.value}>{data?.examDate || "-"}</Text>
             </View>
+          </View>
+          <View style={styles.column}>
             <View style={styles.infoGroup}>
               <Text style={styles.label}>{dictionary?.labels.reportId || "Report ID"}</Text>
               <Text style={styles.value}>{data?.reportId || "-"}</Text>
@@ -204,7 +207,7 @@ export const PatientReportPDF = ({ data, dictionary }: PatientReportPDFProps) =>
       {/* 4. Footer */}
       <View style={styles.footerContainer} fixed>
         <Text style={styles.footerText}>
-          G-Metrics GmbH  |  www.g-metrics.health
+          G-Metrics GmbH  |  www.g-metrics.com
         </Text>
         <Text 
           style={styles.footerText} 

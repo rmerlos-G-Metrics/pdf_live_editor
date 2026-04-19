@@ -10,7 +10,7 @@ import React from "react";
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 import { Image as PDFImage} from "@react-pdf/renderer";
 import { PatientReportData, PDFDictionary } from "@/types/report";
-import { EYEMATE_LOGO_BASE64, G_METRICS_LOGO_BASE64 } from "@/constants/images";
+import { EYEMATE_LOGO_BASE64, G_METRICS_LOGO_BASE64, EYEMATE_DASHBOARD_LOGO_BASE64 } from "@/constants/images";
 
 const styles = StyleSheet.create({
     page: {
@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     headerLogo: {
-        width: 200,
-        height: 50,
+        width: 350,
+        height: 35,
     },
     infoSection: {
         flexDirection: "row",
@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
         gap: 10,
     },
     sideLogoBox: {
-        width: 100,
-        height: 60,
+        width: 90,
+        height: 55,
         justifyContent: "center",
     },
     infoGroup: {
@@ -154,7 +154,7 @@ export const PatientReportPDF = ({ data, dictionary }: PatientReportPDFProps) =>
     <Page size="A4" style={styles.page}>
       
       <View style={styles.header}>
-        <PDFImage style={styles.headerLogo} src={EYEMATE_LOGO_BASE64} />
+        <PDFImage style={styles.headerLogo} src={EYEMATE_DASHBOARD_LOGO_BASE64} />
         <View style={styles.sideLogoBox}>
           <PDFImage style={styles.logo} src={G_METRICS_LOGO_BASE64} />
         </View>
